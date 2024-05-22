@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -16,12 +18,18 @@ import java.util.List;
 public class Cliente {
 
     @Id
+    @NotNull
+    @NotBlank
     private String documento;
 
     @Enumerated(EnumType.STRING)
     private StatusClienteEnum status;
 
+    @NotNull
+    @Column(name = "nome", length = 150, nullable = false)
     private String nome;
+
+    @NotNull
     private LocalDate dataCadastro;
 
     //private List<Conta> contas;

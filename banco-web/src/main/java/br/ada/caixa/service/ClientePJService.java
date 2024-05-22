@@ -25,7 +25,8 @@ public class ClientePJService {
         this.clientePJRepository = clientePJRepository;
         this.modelMapper = modelMapper;
         this.modelMapper.typeMap(ClientePJRequestDto.class, ClientePJ.class)
-                .addMapping(ClientePJRequestDto::getCnpj, ClientePJ::setDocumento);
+                .addMapping(ClientePJRequestDto::getCnpj, ClientePJ::setDocumento)
+                .addMapping(ClientePJRequestDto::getNomeFantasia, ClientePJ::setNome);
     }
 
     public ClientePJResponseDto criar (ClientePJRequestDto clientePJRequestDto){
@@ -68,7 +69,7 @@ public class ClientePJService {
     public ClientePJResponseDto buscarPorCnpj (String cnpj){
         return clientePJRepository.findById(cnpj)
                 .map(clientePJ -> modelMapper.map(clientePJ,ClientePJResponseDto.class))
-                .orElseThrow(() -> new ValidacaoException("Cliente PJ não existe."));
+                .orElseThrow(() -> new ValidacaoException("Cliente PJ não encontrado."));
     }
 
     public List<ClientePJResponseDto> listarTodos(ClientePJFilterDto filter){

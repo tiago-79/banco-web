@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -21,27 +22,27 @@ public class ClientePJController {
     }
 
     @PostMapping("/criar")
-    public ResponseEntity<ClientePJResponseDto> criar (@RequestBody ClientePJRequestDto clientePFRequestDto){
+    public ResponseEntity<ClientePJResponseDto> criar (@RequestBody @Valid ClientePJRequestDto clientePFRequestDto){
         ClientePJResponseDto clientePFResponseDto = clientePJService.criar(clientePFRequestDto);
         System.out.println("criar" + clientePFRequestDto.toString());
         return ResponseEntity.status(HttpStatus.CREATED).body(clientePFResponseDto);
     }
     @PutMapping("/{cnpj}")
     public ResponseEntity<ClientePJResponseDto> atualizar (@PathVariable String cnpj,
-                                                           @RequestBody ClientePJRequestDto clientePJ){
+                                                           @RequestBody @Valid ClientePJRequestDto clientePJ){
         // atualizar cliente
         ClientePJResponseDto clientePJResponseDto = clientePJService.atualizar(cnpj, clientePJ);
         System.out.println("atualizar " + cnpj);
         return ResponseEntity.ok( clientePJResponseDto );
     }
     @DeleteMapping("/{cnpj}")
-    public void excluir (@PathVariable(name = "cnpj") String cnpj){
+    public void excluir (@PathVariable(name = "cnpj") @Valid String cnpj){
         // deletar cliente
         clientePJService.excluir(cnpj);
         System.out.println("deletar" + cnpj);
     }
     @GetMapping("/{cnpj}")
-    public ResponseEntity<ClientePJResponseDto> getPorCnpj(@PathVariable String cnpj){
+    public ResponseEntity<ClientePJResponseDto> getPorCnpj(@PathVariable @Valid String cnpj){
         System.out.println("getPorCnpj " + cnpj);
         return ResponseEntity.ok( clientePJService.buscarPorCnpj(cnpj) );
     }
