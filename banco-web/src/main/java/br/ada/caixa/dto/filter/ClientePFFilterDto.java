@@ -12,6 +12,5 @@ import java.util.List;
 @Setter
 public class ClientePFFilterDto {
     private String cpf;
-
-
+    private String nome;
 }

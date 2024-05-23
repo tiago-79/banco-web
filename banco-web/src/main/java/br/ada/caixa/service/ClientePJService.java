@@ -2,6 +2,7 @@ package br.ada.caixa.service;
 
 import br.ada.caixa.dto.filter.ClientePJFilterDto;
 import br.ada.caixa.dto.request.ClientePJRequestDto;
+import br.ada.caixa.dto.response.ClientePFResponseDto;
 import br.ada.caixa.dto.response.ClientePJResponseDto;
 import br.ada.caixa.entity.ClientePJ;
 import br.ada.caixa.entity.enums.StatusClienteEnum;
@@ -73,8 +74,26 @@ public class ClientePJService {
     }
 
     public List<ClientePJResponseDto> listarTodos(ClientePJFilterDto filter){
-        return clientePJRepository.findAllByCnpjContainsIgnoreCase(filter.getCnpj())
-                .stream().map(clientePJ -> modelMapper.map(clientePJ, ClientePJResponseDto.class))
-                .collect((Collectors.toList()));
+        return clientePJRepository.pesquisar(
+                        filter.getCnpj() != null ? filter.getCnpj() : null,
+                        filter.getNomeFantasia() != null ? filter.getNomeFantasia() : null
+                )
+                .stream()
+                .map(clientePJ -> modelMapper.map(clientePJ, ClientePJResponseDto.class))
+                .collect(Collectors.toList());
+
+//        return clientePJRepository.findAllByCnpjContainsIgnoreCase(filter.getCnpj())
+//                .stream().map(clientePJ -> modelMapper.map(clientePJ, ClientePJResponseDto.class))
+//                .collect((Collectors.toList()));
+    }
+
+    public List<ClientePJResponseDto> listarTodosPaginado(ClientePJFilterDto filter, int page, int size){
+        return clientePJRepository.pesquisar(
+                        filter.getCnpj() != null ? filter.getCnpj() : null,
+                        filter.getNomeFantasia() != null ? filter.getNomeFantasia() : null
+                )
+                .stream()
+                .map(clientePJ -> modelMapper.map(clientePJ, ClientePJResponseDto.class))
+                .collect(Collectors.toList());
     }
 }

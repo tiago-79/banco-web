@@ -3,6 +3,7 @@ package br.ada.caixa.controller;
 import br.ada.caixa.dto.filter.ClientePFFilterDto;
 import br.ada.caixa.dto.request.ClientePFRequestDto;
 import br.ada.caixa.dto.response.ClientePFResponseDto;
+import br.ada.caixa.dto.response.ClientePFResponsePageDto;
 import br.ada.caixa.entity.ClientePF;
 import br.ada.caixa.service.ClientePFService;
 import org.springframework.http.HttpStatus;
@@ -34,7 +35,6 @@ public class ClientePFController {
                                                            @RequestBody @Valid ClientePFRequestDto clientePF){
         // atualizar cliente
         ClientePFResponseDto clientePFResponseDto = clientePFService.atualizar(cpf, clientePF);
-        System.out.println("atualizar " + cpf);
         return ResponseEntity.ok( clientePFResponseDto );
     }
 
@@ -42,18 +42,23 @@ public class ClientePFController {
     public void excluir (@PathVariable(name = "cpf") @Valid String cpf){
         // deletar cliente
         clientePFService.excluir(cpf);
-        System.out.println("deletar" + cpf);
     }
     @GetMapping("/{cpf}")
     public ResponseEntity<ClientePFResponseDto> getPorCpf(@PathVariable @Valid String cpf){
-        System.out.println("getPorCpf " + cpf);
         return ResponseEntity.ok( clientePFService.buscarPorCpf(cpf) );
     }
 
     @GetMapping
     public ResponseEntity<List<ClientePFResponseDto>> listarTodos (ClientePFFilterDto filter){
         List<ClientePFResponseDto> listaCliesntesPF = clientePFService.listarTodos(filter);
-        System.out.println("getPorCpf " + listaCliesntesPF);
+        return ResponseEntity.ok(listaCliesntesPF);
+    }
+
+    @GetMapping("/paginado")
+    public ResponseEntity<ClientePFResponsePageDto> listarTodosPaginado (ClientePFFilterDto filter,
+                                                                         @RequestParam(defaultValue = "0") int page,
+                                                                         @RequestParam(defaultValue = "5") int size){
+        ClientePFResponsePageDto listaCliesntesPF = clientePFService.listarTodosPaginado(filter, page, size);
         return ResponseEntity.ok(listaCliesntesPF);
     }
 }

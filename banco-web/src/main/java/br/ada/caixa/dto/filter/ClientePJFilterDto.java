@@ -7,4 +7,5 @@ import lombok.Setter;
 @Setter
 public class ClientePJFilterDto {
     private String cnpj;
+    private String nomeFantasia;
 }

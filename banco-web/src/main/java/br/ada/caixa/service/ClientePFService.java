@@ -3,12 +3,15 @@ package br.ada.caixa.service;
 import br.ada.caixa.dto.filter.ClientePFFilterDto;
 import br.ada.caixa.dto.request.ClientePFRequestDto;
 import br.ada.caixa.dto.response.ClientePFResponseDto;
+import br.ada.caixa.dto.response.ClientePFResponsePageDto;
 import br.ada.caixa.entity.ClientePF;
 import br.ada.caixa.entity.ContaCorrente;
 import br.ada.caixa.entity.enums.StatusClienteEnum;
 import br.ada.caixa.exceptions.ValidacaoException;
 import br.ada.caixa.repository.ClientePFRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -82,8 +85,37 @@ public class ClientePFService {
     }
 
     public List<ClientePFResponseDto> listarTodos(ClientePFFilterDto filter){
-        return clientePFRepository.findAllByCpfContainsIgnoreCase(filter.getCpf())
-                .stream().map(clientePF -> modelMapper.map(clientePF, ClientePFResponseDto.class))
-                .collect((Collectors.toList()));
+        return clientePFRepository.pesquisar(
+                filter.getCpf() != null ? filter.getCpf() : null,
+                filter.getNome() != null ? filter.getNome() : null
+            )
+                .stream()
+                .map(clientePF -> modelMapper.map(clientePF, ClientePFResponseDto.class))
+                .collect(Collectors.toList());
+//        return clientePFRepository.findAllByCpfContainsIgnoreCase(filter.getCpf())
+//                .stream().map(clientePF -> modelMapper.map(clientePF, ClientePFResponseDto.class))
+//                .collect((Collectors.toList()));
+    }
+
+    public ClientePFResponsePageDto listarTodosPaginado(ClientePFFilterDto filter, int page, int size){
+
+        Page<ClientePF> clientePFPage = clientePFRepository.pesquisarPage(
+                filter.getCpf() != null ? filter.getCpf() : null,
+                filter.getNome() != null ? filter.getNome().toUpperCase() : null,
+                PageRequest.of(page, size));
+
+        List<ClientePFResponseDto> clientes = clientePFPage.getContent()
+                .stream()
+                .map(clientePF -> modelMapper.map(clientePF, ClientePFResponseDto.class))
+                .collect(Collectors.toList());
+
+        ClientePFResponsePageDto clientePFResponsePageDto = new ClientePFResponsePageDto();
+        clientePFResponsePageDto.setContent(clientes);
+        clientePFResponsePageDto.setPage(page);
+        clientePFResponsePageDto.setSize(size);
+        clientePFResponsePageDto.setTotal(clientePFPage.getTotalElements());
+        clientePFResponsePageDto.setTotalPages(clientePFPage.getTotalPages());
+
+        return clientePFResponsePageDto;
     }
 }

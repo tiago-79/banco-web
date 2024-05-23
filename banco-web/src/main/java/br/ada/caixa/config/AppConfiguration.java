@@ -19,11 +19,18 @@ public class AppConfiguration {
     @Bean
     public ModelMapper getModelMapper(){
         Converter<String, LocalDate> dateConverter = new AbstractConverter<>() {
-            @Override
             protected LocalDate convert(String s) {
-                return null;
+                return s == null ? null : LocalDate.parse(s);
             }
         };
+
+        Converter<LocalDate, String> dateStringConverter = new AbstractConverter<>() {
+            protected String convert(LocalDate s) {
+                return s == null ? null : s.toString();
+            }
+        };
+
+
 
         ModelMapper modelMapper = new ModelMapper();
 
@@ -42,6 +49,7 @@ public class AppConfiguration {
                 .addMapping(ClientePJ::getNome, ClientePJResponseDto::setNome);
 
         modelMapper.addConverter(dateConverter);
+        modelMapper.addConverter(dateStringConverter);
 
         return modelMapper;
     }
