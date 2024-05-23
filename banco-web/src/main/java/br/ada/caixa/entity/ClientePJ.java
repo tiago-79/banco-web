@@ -5,6 +5,8 @@ import lombok.Setter;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
@@ -12,7 +14,16 @@ import javax.persistence.Entity;
 @DiscriminatorValue("PJ")
 public class ClientePJ extends Cliente {
 
+    @NotNull
+    @NotBlank
     private String cnpj;
+
+    @NotNull
+    @NotBlank
+    private String nomeFantasia;
+
+    @NotNull
+    @NotBlank
     private String razaoSocial;
 
 }

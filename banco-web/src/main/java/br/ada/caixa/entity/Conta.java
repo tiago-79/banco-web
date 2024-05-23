@@ -1,40 +1,29 @@
 package br.ada.caixa.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Random;
 
+@Getter
+@Setter
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Conta {
 
-    private Integer numero;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long numero;
+
     private transient BigDecimal saldo;
+
     private LocalDate dataCriacao;
+
+    @ManyToOne
+    @JoinColumn(name = "cliente_id")
     private Cliente cliente;
 
-    public Conta(Cliente cliente) {
-        this.cliente = cliente;
-        this.numero = new Random().nextInt();
-        this.dataCriacao = LocalDate.now();
-        this.saldo = BigDecimal.ZERO;
-    }
-
-    public Cliente getCliente() {
-        return cliente;
-    }
-
-    public Integer getNumero() {
-        return numero;
-    }
-
-    public LocalDate getDataCriacao() {
-        return dataCriacao;
-    }
-
-    public BigDecimal getSaldo() {
-        return saldo;
-    }
-
-    public void setSaldo(BigDecimal saldo) {
-        this.saldo = saldo;
-    }
 }

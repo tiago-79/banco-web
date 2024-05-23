@@ -37,6 +37,7 @@ public class ClientePFController {
         System.out.println("atualizar " + cpf);
         return ResponseEntity.ok( clientePFResponseDto );
     }
+
     @DeleteMapping("/{cpf}")
     public void excluir (@PathVariable(name = "cpf") @Valid String cpf){
         // deletar cliente

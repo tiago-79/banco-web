@@ -32,6 +32,7 @@ public class Cliente {
     @NotNull
     private LocalDate dataCadastro;
 
-    //private List<Conta> contas;
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
+    private List<Conta> contas;
 
 }

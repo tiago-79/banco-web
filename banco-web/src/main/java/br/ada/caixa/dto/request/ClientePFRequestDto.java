@@ -1,7 +1,6 @@
 package br.ada.caixa.dto.request;
 
 import br.ada.caixa.entity.Conta;
-import br.ada.caixa.entity.enums.StatusClienteEnum;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,7 +23,7 @@ public class ClientePFRequestDto {
     private String nome;
 
     @NotNull
-    @NotBlank
     private LocalDate dataNascimento;
-//    private List<Conta> contas;
+
+    private List<Conta> contas;
 }

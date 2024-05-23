@@ -1,9 +1,10 @@
 package br.ada.caixa.entity;
 
-public class ContaCorrente extends Conta {
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
 
-    public ContaCorrente(Cliente cliente) {
-        super(cliente);
-    }
+@Entity
+@DiscriminatorValue("CC")
+public class ContaCorrente extends Conta {
 
 }

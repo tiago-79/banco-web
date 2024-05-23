@@ -17,5 +17,5 @@ public class ClientePJResponseDto {
     private String razaoSocial;
     private LocalDate dataCadastro;
     private StatusClienteEnum status;
-    private List<Conta> contas;
+    private List<ContaResponseDto> contas;
 }

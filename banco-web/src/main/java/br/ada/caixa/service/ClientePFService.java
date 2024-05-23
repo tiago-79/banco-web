@@ -4,14 +4,16 @@ import br.ada.caixa.dto.filter.ClientePFFilterDto;
 import br.ada.caixa.dto.request.ClientePFRequestDto;
 import br.ada.caixa.dto.response.ClientePFResponseDto;
 import br.ada.caixa.entity.ClientePF;
+import br.ada.caixa.entity.ContaCorrente;
 import br.ada.caixa.entity.enums.StatusClienteEnum;
 import br.ada.caixa.exceptions.ValidacaoException;
 import br.ada.caixa.repository.ClientePFRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,6 +36,13 @@ public class ClientePFService {
         ClientePF clientePF = modelMapper.map(clientePFRequestDto, ClientePF.class);
         clientePF.setStatus(StatusClienteEnum.ATIVO);
         clientePF.setDataCadastro(LocalDate.now());
+
+        ContaCorrente contaCorrente = new ContaCorrente();
+        contaCorrente.setCliente(clientePF);
+        contaCorrente.setSaldo(BigDecimal.ZERO);
+
+        clientePF.setContas(new ArrayList<>());
+        clientePF.getContas().add(contaCorrente);
 
         clientePF = clientePFRepository.save(clientePF);
 
