@@ -5,13 +5,16 @@ import br.ada.caixa.dto.request.ClientePJRequestDto;
 import br.ada.caixa.dto.response.ClientePFResponseDto;
 import br.ada.caixa.dto.response.ClientePJResponseDto;
 import br.ada.caixa.entity.ClientePJ;
+import br.ada.caixa.entity.ContaCorrente;
 import br.ada.caixa.entity.enums.StatusClienteEnum;
 import br.ada.caixa.exceptions.ValidacaoException;
 import br.ada.caixa.repository.ClientePJRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,6 +38,13 @@ public class ClientePJService {
         ClientePJ clientePJ = modelMapper.map(clientePJRequestDto, ClientePJ.class);
         clientePJ.setStatus(StatusClienteEnum.ATIVO);
         clientePJ.setDataCadastro(LocalDate.now());
+
+        ContaCorrente contaCorrente = new ContaCorrente();
+        contaCorrente.setCliente(clientePJ);
+        contaCorrente.setSaldo(BigDecimal.ZERO);
+
+        clientePJ.setContas(new ArrayList<>());
+        clientePJ.getContas().add(contaCorrente);
 
         clientePJ = clientePJRepository.save(clientePJ);
 

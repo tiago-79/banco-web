@@ -43,6 +43,7 @@ public class ClientePFService {
         ContaCorrente contaCorrente = new ContaCorrente();
         contaCorrente.setCliente(clientePF);
         contaCorrente.setSaldo(BigDecimal.ZERO);
+        contaCorrente.setDataCriacao(LocalDate.now());
 
         clientePF.setContas(new ArrayList<>());
         clientePF.getContas().add(contaCorrente);
